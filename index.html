@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Design Tester</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .url-input-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s;
+            min-width: 300px;
+        }
+
+        .url-input:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .device-presets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .device-btn {
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .device-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .device-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .device-icon {
+            font-size: 2em;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .device-size {
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        .custom-size {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .size-input {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .size-input:focus {
+            border-color: #667eea;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .control-group input[type="range"] {
+            width: 150px;
+        }
+
+        .viewer-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .current-size {
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .viewer-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2em;
+        }
+
+        .icon-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .iframe-wrapper {
+            position: relative;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .iframe-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .measurement-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .ruler-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: auto;
+            cursor: crosshair;
+            z-index: 20;
+            display: none;
+        }
+
+        .ruler-line {
+            position: absolute;
+            background: rgba(102, 126, 234, 0.5);
+            pointer-events: none;
+        }
+
+        .ruler-label {
+            position: absolute;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            display: none;
+            background-image:
+                repeating-linear-gradient(0deg, rgba(102, 126, 234, 0.1) 0px, rgba(102, 126, 234, 0.1) 1px, transparent 1px, transparent 10px),
+                repeating-linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0px, rgba(102, 126, 234, 0.1) 1px, transparent 1px, transparent 10px),
+                repeating-linear-gradient(0deg, rgba(102, 126, 234, 0.2) 0px, rgba(102, 126, 234, 0.2) 2px, transparent 2px, transparent 50px),
+                repeating-linear-gradient(90deg, rgba(102, 126, 234, 0.2) 0px, rgba(102, 126, 234, 0.2) 2px, transparent 2px, transparent 50px);
+            background-size: 10px 10px, 10px 10px, 50px 50px, 50px 50px;
+        }
+
+        .measurement-info {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 30;
+            display: none;
+        }
+
+        .measurement-info div {
+            margin: 5px 0;
+        }
+
+        .scale-rulers {
+            position: absolute;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        .horizontal-ruler {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 2px solid #667eea;
+            display: none;
+        }
+
+        .vertical-ruler {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-right: 2px solid #667eea;
+            display: none;
+        }
+
+        .ruler-tick {
+            position: absolute;
+            background: #667eea;
+        }
+
+        .ruler-tick.major {
+            width: 2px;
+            height: 15px;
+        }
+
+        .ruler-tick.minor {
+            width: 1px;
+            height: 8px;
+        }
+
+        .ruler-number {
+            position: absolute;
+            font-size: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .btn.active {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .suggestions {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .suggestions h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .suggestion-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .suggestion-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .suggestion-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .suggestion-card li {
+            padding: 8px 0;
+            color: #555;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .suggestion-card li:before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .orientation-toggle {
+            display: flex;
+            gap: 10px;
+        }
+
+        .orientation-btn {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .orientation-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .url-input-section {
+                flex-direction: column;
+            }
+
+            .url-input {
+                min-width: 100%;
+            }
+
+            .custom-size {
+                grid-template-columns: 1fr;
+            }
+
+            .device-presets {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .viewer-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Responsive Design Tester</h1>
+            <p class="subtitle">Test how websites look on different devices and screen sizes</p>
+
+            <div class="url-input-section">
+                <input type="text" class="url-input" id="urlInput"
+                    placeholder="Enter website URL (e.g., https://example.com)" value="https://example.com">
+                <button class="btn" id="loadBtn">Load Website</button>
+            </div>
+
+            <div class="device-presets">
+                <div class="device-btn" data-width="375" data-height="667">
+                    <span class="device-icon">📱</span>
+                    <div>iPhone SE</div>
+                    <div class="device-size">375 × 667</div>
+                </div>
+                <div class="device-btn" data-width="414" data-height="896">
+                    <span class="device-icon">📱</span>
+                    <div>iPhone 12</div>
+                    <div class="device-size">414 × 896</div>
+                </div>
+                <div class="device-btn" data-width="768" data-height="1024">
+                    <span class="device-icon">📱</span>
+                    <div>iPad</div>
+                    <div class="device-size">768 × 1024</div>
+                </div>
+                <div class="device-btn" data-width="1024" data-height="1366">
+                    <span class="device-icon">💻</span>
+                    <div>iPad Pro</div>
+                    <div class="device-size">1024 × 1366</div>
+                </div>
+                <div class="device-btn" data-width="1280" data-height="720">
+                    <span class="device-icon">💻</span>
+                    <div>Laptop</div>
+                    <div class="device-size">1280 × 720</div>
+                </div>
+                <div class="device-btn" data-width="1920" data-height="1080">
+                    <span class="device-icon">🖥️</span>
+                    <div>Desktop</div>
+                    <div class="device-size">1920 × 1080</div>
+                </div>
+            </div>
+
+            <div class="custom-size">
+                <input type="number" class="size-input" id="customWidth" placeholder="Width (px)" value="1280">
+                <input type="number" class="size-input" id="customHeight" placeholder="Height (px)" value="720">
+                <button class="btn" id="applyCustomBtn">Apply Custom</button>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label>Zoom:</label>
+                    <input type="range" id="zoomSlider" min="25" max="150" value="100" step="5">
+                    <span id="zoomValue">100%</span>
+                </div>
+                <div class="orientation-toggle">
+                    <button class="orientation-btn active" data-orientation="portrait">Portrait</button>
+                    <button class="orientation-btn" data-orientation="landscape">Landscape</button>
+                </div>
+                <div class="control-group">
+                    <button class="btn" id="measureBtn">📏 Enable Ruler</button>
+                    <button class="btn" id="gridBtn">⊞ Toggle Grid</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="viewer-container">
+            <div class="viewer-header">
+                <div class="current-size">
+                    <span id="currentDimensions">1280 × 720</span>
+                </div>
+                <div class="viewer-actions">
+                    <button class="icon-btn" id="refreshBtn" title="Refresh">🔄</button>
+                    <button class="icon-btn" id="screenshotBtn" title="Screenshot">📷</button>
+                    <button class="icon-btn" id="fullscreenBtn" title="Toggle Fullscreen">⛶</button>
+                </div>
+            </div>
+            <div class="iframe-wrapper" id="iframeWrapper">
+                <div class="horizontal-ruler" id="horizontalRuler"></div>
+                <div class="vertical-ruler" id="verticalRuler"></div>
+                <div class="grid-overlay" id="gridOverlay"></div>
+                <div class="ruler-overlay" id="rulerOverlay"></div>
+                <div class="measurement-info" id="measurementInfo">
+                    <div><strong>Measurement Mode Active</strong></div>
+                    <div>Click and drag to measure</div>
+                    <div id="measurementData"></div>
+                </div>
+                <iframe id="previewFrame" src="https://example.com"></iframe>
+            </div>
+        </div>
+
+        <div class="suggestions">
+            <h3>💡 Responsive Design Best Practices</h3>
+            <div class="suggestion-grid">
+                <div class="suggestion-card">
+                    <h4>📱 Mobile-First Approach</h4>
+                    <ul>
+                        <li>Design for mobile screens first, then scale up</li>
+                        <li>Use min-width media queries for larger screens</li>
+                        <li>Optimize touch targets (minimum 44x44px)</li>
+                        <li>Test on real devices when possible</li>
+                    </ul>
+                </div>
+                <div class="suggestion-card">
+                    <h4>🎨 Flexible Layouts</h4>
+                    <ul>
+                        <li>Use relative units (%, em, rem) instead of px</li>
+                        <li>Implement CSS Grid and Flexbox</li>
+                        <li>Set max-width for content containers</li>
+                        <li>Use fluid typography with clamp()</li>
+                    </ul>
+                </div>
+                <div class="suggestion-card">
+                    <h4>🖼️ Images & Media</h4>
+                    <ul>
+                        <li>Use responsive images with srcset</li>
+                        <li>Implement lazy loading for images</li>
+                        <li>Optimize image file sizes</li>
+                        <li>Use SVG for icons and logos</li>
+                    </ul>
+                </div>
+                <div class="suggestion-card">
+                    <h4>⚡ Performance</h4>
+                    <ul>
+                        <li>Minimize HTTP requests</li>
+                        <li>Enable browser caching</li>
+                        <li>Compress CSS and JavaScript files</li>
+                        <li>Use CDN for static assets</li>
+                    </ul>
+                </div>
+                <div class="suggestion-card">
+                    <h4>📏 Common Breakpoints</h4>
+                    <ul>
+                        <li>Mobile: 320px - 480px</li>
+                        <li>Tablet: 481px - 768px</li>
+                        <li>Laptop: 769px - 1024px</li>
+                        <li>Desktop: 1025px and above</li>
+                    </ul>
+                </div>
+                <div class="suggestion-card">
+                    <h4>✅ Testing Tips</h4>
+                    <ul>
+                        <li>Test on multiple browsers</li>
+                        <li>Check both portrait and landscape</li>
+                        <li>Verify touch interactions work</li>
+                        <li>Test with slow network speeds</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let currentWidth = 1280;
+            let currentHeight = 720;
+            let currentOrientation = 'portrait';
+            let currentZoom = 100;
+            let measurementMode = false;
+            let isDrawing = false;
+            let startX, startY;
+            let gridEnabled = false;
+
+            function createRulers() {
+                const hRuler = $('#horizontalRuler');
+                const vRuler = $('#verticalRuler');
+
+                hRuler.empty();
+                vRuler.empty();
+
+                // Horizontal ruler
+                for (let i = 0; i <= currentWidth; i += 10) {
+                    const isMajor = i % 50 === 0;
+                    const tick = $('<div>').addClass('ruler-tick').addClass(isMajor ? 'major' : 'minor');
+                    tick.css({
+                        left: i + 'px',
+                        bottom: '0'
+                    });
+                    hRuler.append(tick);
+
+                    if (isMajor && i > 0) {
+                        const num = $('<div>').addClass('ruler-number').text(i);
+                        num.css({
+                            left: (i - 10) + 'px',
+                            top: '2px'
+                        });
+                        hRuler.append(num);
+                    }
+                }
+
+                // Vertical ruler
+                for (let i = 0; i <= currentHeight; i += 10) {
+                    const isMajor = i % 50 === 0;
+                    const tick = $('<div>').addClass('ruler-tick').addClass(isMajor ? 'major' : 'minor');
+                    tick.css({
+                        top: i + 'px',
+                        right: '0',
+                        width: isMajor ? '15px' : '8px',
+                        height: isMajor ? '2px' : '1px'
+                    });
+                    vRuler.append(tick);
+
+                    if (isMajor && i > 0) {
+                        const num = $('<div>').addClass('ruler-number').text(i);
+                        num.css({
+                            top: (i - 8) + 'px',
+                            left: '2px'
+                        });
+                        vRuler.append(num);
+                    }
+                }
+            }
+
+            function updateIframeSize(width, height) {
+                currentWidth = width;
+                currentHeight = height;
+
+                const zoom = currentZoom / 100;
+                $('#iframeWrapper').css({
+                    'width': width + 'px',
+                    'height': height + 'px',
+                    'transform': `scale(${zoom})`,
+                    'transform-origin': 'top center'
+                });
+
+                $('#currentDimensions').text(width + ' × ' + height);
+                createRulers();
+            }
+
+            function loadUrl(url) {
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    url = 'https://' + url;
+                }
+                $('#previewFrame').attr('src', url);
+            }
+
+            // Device preset buttons
+            $('.device-btn').click(function () {
+                $('.device-btn').removeClass('active');
+                $(this).addClass('active');
+
+                let width = parseInt($(this).data('width'));
+                let height = parseInt($(this).data('height'));
+
+                if (currentOrientation === 'landscape') {
+                    [width, height] = [height, width];
+                }
+
+                updateIframeSize(width, height);
+            });
+
+            // Load button
+            $('#loadBtn').click(function () {
+                const url = $('#urlInput').val();
+                if (url) {
+                    loadUrl(url);
+                }
+            });
+
+            // Enter key for URL input
+            $('#urlInput').keypress(function (e) {
+                if (e.which === 13) {
+                    $('#loadBtn').click();
+                }
+            });
+
+            // Custom size
+            $('#applyCustomBtn').click(function () {
+                const width = parseInt($('#customWidth').val()) || 1280;
+                const height = parseInt($('#customHeight').val()) || 720;
+                $('.device-btn').removeClass('active');
+                updateIframeSize(width, height);
+            });
+
+            // Orientation toggle
+            $('.orientation-btn').click(function () {
+                $('.orientation-btn').removeClass('active');
+                $(this).addClass('active');
+                currentOrientation = $(this).data('orientation');
+
+                // Swap dimensions
+                updateIframeSize(currentHeight, currentWidth);
+            });
+
+            // Zoom slider
+            $('#zoomSlider').on('input', function () {
+                currentZoom = parseInt($(this).val());
+                $('#zoomValue').text(currentZoom + '%');
+                updateIframeSize(currentWidth, currentHeight);
+            });
+
+            // Refresh button
+            $('#refreshBtn').click(function () {
+                $('#previewFrame').attr('src', $('#previewFrame').attr('src'));
+            });
+
+            // Screenshot button (simulated)
+            $('#screenshotBtn').click(function () {
+                alert('Screenshot feature would capture the current view. In a production environment, this would use html2canvas or similar libraries.');
+            });
+
+            // Fullscreen toggle
+            $('#fullscreenBtn').click(function () {
+                const elem = document.getElementById('iframeWrapper');
+                if (!document.fullscreenElement) {
+                    elem.requestFullscreen().catch(err => {
+                        console.log('Fullscreen error:', err);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+
+            // Measure button
+            $('#measureBtn').click(function () {
+                measurementMode = !measurementMode;
+                $(this).toggleClass('active');
+
+                if (measurementMode) {
+                    $('#rulerOverlay').show();
+                    $('#measurementInfo').show();
+                    $('#horizontalRuler').show();
+                    $('#verticalRuler').show();
+                    $(this).text('📏 Disable Ruler');
+                } else {
+                    $('#rulerOverlay').hide();
+                    $('#measurementInfo').hide();
+                    $('#horizontalRuler').hide();
+                    $('#verticalRuler').hide();
+                    $('#rulerOverlay').empty();
+                    $(this).text('📏 Enable Ruler');
+                }
+            });
+
+            // Grid button
+            $('#gridBtn').click(function () {
+                gridEnabled = !gridEnabled;
+                $(this).toggleClass('active');
+
+                if (gridEnabled) {
+                    $('#gridOverlay').show();
+                    $(this).text('⊞ Hide Grid');
+                } else {
+                    $('#gridOverlay').hide();
+                    $(this).text('⊞ Show Grid');
+                }
+            });
+
+            // Ruler drawing
+            $('#rulerOverlay').on('mousedown', function (e) {
+                if (!measurementMode) return;
+
+                isDrawing = true;
+                const offset = $(this).offset();
+                startX = e.pageX - offset.left;
+                startY = e.pageY - offset.top;
+
+                $(this).empty();
+            });
+
+            $('#rulerOverlay').on('mousemove', function (e) {
+                if (!isDrawing || !measurementMode) return;
+
+                const offset = $(this).offset();
+                const currentX = e.pageX - offset.left;
+                const currentY = e.pageY - offset.top;
+
+                const width = Math.abs(currentX - startX);
+                const height = Math.abs(currentY - startY);
+                const left = Math.min(startX, currentX);
+                const top = Math.min(startY, currentY);
+
+                $(this).empty();
+
+                // Draw rectangle
+                const rect = $('<div>').addClass('ruler-line').css({
+                    left: left + 'px',
+                    top: top + 'px',
+                    width: width + 'px',
+                    height: height + 'px',
+                    border: '2px solid #667eea'
+                });
+                $(this).append(rect);
+
+                // Draw dimensions
+                const diagonal = Math.sqrt(width * width + height * height).toFixed(1);
+
+                const labelTop = $('<div>').addClass('ruler-label').text(width + 'px').css({
+                    left: (left + width / 2 - 30) + 'px',
+                    top: (top - 30) + 'px'
+                });
+
+                const labelLeft = $('<div>').addClass('ruler-label').text(height + 'px').css({
+                    left: (left - 60) + 'px',
+                    top: (top + height / 2 - 15) + 'px'
+                });
+
+                const labelDiag = $('<div>').addClass('ruler-label').text('↗ ' + diagonal + 'px').css({
+                    left: (left + width / 2) + 'px',
+                    top: (top + height / 2) + 'px'
+                });
+
+                $(this).append(labelTop, labelLeft, labelDiag);
+
+                $('#measurementData').html(
+                    '<div><strong>Width:</strong> ' + width + 'px</div>' +
+                    '<div><strong>Height:</strong> ' + height + 'px</div>' +
+                    '<div><strong>Diagonal:</strong> ' + diagonal + 'px</div>'
+                );
+            });
+
+            $('#rulerOverlay').on('mouseup', function () {
+                isDrawing = false;
+            });
+
+            $('#rulerOverlay').on('mouseleave', function () {
+                isDrawing = false;
+            });
+
+            // Initialize
+            updateIframeSize(currentWidth, currentHeight);
+        });
+    </script>
+</body>
+
+</html>
